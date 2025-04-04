@@ -8,12 +8,11 @@ export default function SignUpPage() {
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
         <div className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 relative">
+            <div className="w-40 h-32 relative">
               <Image
                 src="/logo.png"
                 alt="Logo"
                 fill
-                className="object-contain"
               />
             </div>
           </div>
@@ -21,7 +20,7 @@ export default function SignUpPage() {
             إنشاء حساب جديد
           </h2>
           <p className="mt-2 text-sm text-gray-600 font-[400]">
-            انضم إلينا وابدأ رحلتك مع منصة الجمعيات
+            انضم إلينا وابدأ رحلتك مع تدارت نوغرم
           </p>
         </div>
         <form className="mt-8 space-y-6" action="#" method="POST">

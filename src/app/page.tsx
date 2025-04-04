@@ -69,9 +69,9 @@ export default async function HomePage() {
               {/* Welcome Section */}
               <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl p-6 border border-indigo-100">
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent mb-2">
-                  مرحباً بك في منصة الجمعيات
+                  مرحباً بك في تدارت نوغرم
                 </h1>
-                <p className="text-gray-600">تابع آخر الأنشطة والفعاليات في الجمعيات</p>
+                <p className="text-gray-600">تابع آخر الأنشطة والفعاليات في الهيئات</p>
               </div>
 
               {/* Statistics Section */}

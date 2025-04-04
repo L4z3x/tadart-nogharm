@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -41,18 +42,28 @@ export default function Navigation() {
   const pathname = usePathname()
 
   return (
-    <nav className="bg-white shadow">
+   <nav className="bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 border-b border-primary/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link href="/" className="text-3xl font-bold text-primary-600 font-[800]">
+          <div className="flex items-center space-x-4">
+            <div className="relative w-24 h-24">
+              <Image
+                src="/logo.png"
+                alt="logo"
+                fill
+                className="object-contain"
+                priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              />
+            </div>
+            <Link href="/" className="text-3xl font-bold text-primary font-[800]">
               تدارت نوغرم
             </Link>
           </div>
           <div className="flex items-center space-x-4 space-x-reverse">
             <Link
               href="/search"
-              className="p-2 text-gray-500 hover:text-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 rounded-full"
+              className="p-2 text-primary/70 hover:text-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary rounded-full transition-colors"
             >
               <span className="sr-only">بحث</span>
               <svg
@@ -92,8 +103,8 @@ export default function Navigation() {
               </DropdownMenuContent>
             </DropdownMenu>
             <Link href="/create-association">
-              <Button variant="outline" size="icon">
-                <Plus className="h-4 w-4" />
+              <Button variant="outline" size="icon" className="bg-gradient-to-r from-primary/10 to-blue-500/10 hover:from-primary/20 hover:to-blue-500/20 border-primary/20">
+                <Plus className="h-4 w-4 text-primary" />
               </Button>
             </Link>
           </div>

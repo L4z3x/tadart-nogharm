@@ -22,40 +22,41 @@ const initialState: UserAssociationsState = {
   data: {
     1: {
       id: 1,
-      role: 'عضو نشط',
+      role: 'عضو العشيرة',
       join_date: '2024-01-15',
       status: 'نشط',
       activities_participated: 5,
       upcoming_events: 2,
       achievements: [
-        'مشارك في حملة تنظيف الشاطئ',
-        'متطوع في اليوم العالمي للبيئة',
-        'منسق فعالية اليوم المفتوح'
+        'مشارك في مهرجان العيد السنوي',
+        'متطوع في حفل تكريم الطلاب المتفوقين',
+        'مساهم في صندوق الزكاة'
       ]
     },
     2: {
       id: 2,
-      role: 'عضو مجلس الإدارة',
+      role: 'عضو المكتب',
       join_date: '2023-11-20',
       status: 'نشط',
-      activities_participated: 12,
+      activities_participated: 8,
       upcoming_events: 3,
       achievements: [
-        'رئيس لجنة الأنشطة',
-        'منظم معرض الكتاب السنوي',
-        'مشرف على برنامج التطوع الصيفي'
+        'مشارك في معرض التخصصات الجامعية',
+        'متطوع في دورة مهارات البحث العلمي',
+        'منسق للبرامج التعليمية'
       ]
     },
     3: {
       id: 3,
-      role: 'متطوع',
+      role: 'عضو الجمعية',
       join_date: '2024-02-10',
       status: 'نشط',
-      activities_participated: 3,
-      upcoming_events: 1,
+      activities_participated: 6,
+      upcoming_events: 2,
       achievements: [
-        'مشارك في حملة التوعية الصحية',
-        'متطوع في اليوم العالمي للمسنين'
+        'مشارك في المدرسة الدينية الصيفية',
+        'متطوع في ندوة الفقه الإباضي',
+        'مساهم في البرامج التعليمية'
       ]
     }
   },

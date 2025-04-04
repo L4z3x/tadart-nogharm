@@ -30,12 +30,11 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
         <div className="text-center">
           <div className="flex justify-center mb-4">
-            <div className="w-16 h-16 relative">
+            <div className="w-40 h-32 relative">
               <Image
                 src="/logo.png"
                 alt="Logo"
                 fill
-                className="object-contain"
               />
             </div>
           </div>

@@ -13,7 +13,7 @@ import { RootState } from '@/store/store';
 import { joinAssociation } from '@/store/slices/membershipsSlice';
 import { getAssociationById } from '@/lib/dataService';
 
-export default function AssociationPage() {
+export default function AssociationProfile() {
   const params = useParams();
   const associationId = params.id as string;
   const dispatch = useDispatch();
@@ -79,8 +79,6 @@ export default function AssociationPage() {
                 </div>
               </div>
 
-            
-
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className={isAdmin ? "md:col-span-2" : "md:col-span-3"}>
                   <div className="bg-white rounded-lg shadow-md p-6">
@@ -113,7 +111,7 @@ export default function AssociationPage() {
                     <div className="bg-white rounded-lg shadow-md p-6 sticky top-8">
                       <h2 className="text-xl font-bold text-gray-900 mb-4 font-[800]">
                         إجراءات سريعة
-                      </h2>block
+                      </h2>
                       <div className="space-y-4">
                         <Link
                           href={`/associations/${association.id}/activities/new`}

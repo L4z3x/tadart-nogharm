@@ -19,7 +19,7 @@ interface UserMemberships {
 
 const userMemberships: UserMemberships = {
   "1": true,  // User is a member of association with ID 1
-  "2": false, // User is not a member of association with ID 2
+  "2": true, // User is not a member of association with ID 2
   "3": false  // User is not a member of association with ID 3
 };
 
