@@ -1,0 +1,10 @@
+
+- select profile to display full data to edit it.
+
+- user opens his ta3shirt profile to update it.
+
+- admin receives the notification to approve the changes.
+
+- centerelize the mock data on a json file 
+
+- add request aprroval button below the memebr display 

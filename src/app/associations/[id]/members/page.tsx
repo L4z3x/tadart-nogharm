@@ -1,203 +1,328 @@
-'use client'
+'use client';
 
-import React, { useState } from 'react'
-import { mockMembers, type Member } from '@/lib/mockMembers'
-import Navigation from '@/components/Navigation'
-import { 
-  MagnifyingGlassIcon,
-  FunnelIcon,
-  UserCircleIcon,
-  EnvelopeIcon,
-  PhoneIcon,
-  CalendarIcon,
-  CheckCircleIcon,
-  XCircleIcon,
-  ClockIcon,
-  UserGroupIcon,
-  StarIcon
-} from '@heroicons/react/24/outline'
+import { useState } from 'react';
+import { getMembers } from '@/lib/dataService';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Card } from '@/components/ui/card';
+import { Slider } from '@/components/ui/slider';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import Navigation from '@/components/Navigation';
+interface MembersPageProps {
+  params: {
+    id: string;
+  };
+}
 
-export default function MembersPage() {
-  const [searchTerm, setSearchTerm] = useState('')
-  const [statusFilter, setStatusFilter] = useState<string>('all')
-  const [roleFilter, setRoleFilter] = useState<string>('all')
+export default function MembersPage({ params }: MembersPageProps) {
+  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+  const [selectedFinancialStatus, setSelectedFinancialStatus] = useState<string>('all');
+  const [selectedMaritalStatus, setSelectedMaritalStatus] = useState<string>('all');
+  const [selectedOccupation, setSelectedOccupation] = useState<string>('all');
+  const [selectedGender, setSelectedGender] = useState<string>('all');
+  const [selectedContributions, setSelectedContributions] = useState<string>('all');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [isFiltersOpen, setIsFiltersOpen] = useState(true);
 
-  const filteredMembers = mockMembers.filter(member => {
-    const matchesSearch = 
-      member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      member.phone.includes(searchTerm)
-    
-    const matchesStatus = statusFilter === 'all' || member.status === statusFilter
-    const matchesRole = roleFilter === 'all' || member.role === roleFilter
+  const members = getMembers();
 
-    return matchesSearch && matchesStatus && matchesRole
-  })
 
-  const getStatusColor = (status: Member['status']) => {
-    switch (status) {
-      case 'active':
-        return 'text-green-600 bg-green-50'
-      case 'inactive':
-        return 'text-red-600 bg-red-50'
-      case 'pending':
-        return 'text-amber-600 bg-amber-50'
-    }
-  }
+  const filteredMembers = members
+    .filter((member) => {
+      const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        member.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        member.phone.includes(searchTerm);
 
-  const getStatusIcon = (status: Member['status']) => {
-    switch (status) {
-      case 'active':
-        return <CheckCircleIcon className="h-5 w-5" />
-      case 'inactive':
-        return <XCircleIcon className="h-5 w-5" />
-      case 'pending':
-        return <ClockIcon className="h-5 w-5" />
-    }
-  }
+      const matchesStatus = selectedStatus === 'all' || member.status === selectedStatus;
+      const matchesFinancialStatus = selectedFinancialStatus === 'all' || member.financialStatus === selectedFinancialStatus;
+      const matchesMaritalStatus = selectedMaritalStatus === 'all' || member.maritalStatus === selectedMaritalStatus;
+      const matchesOccupation = selectedOccupation === 'all' || member.occupation === selectedOccupation;
+      const matchesGender = selectedGender === 'all' || member.gender === selectedGender;
+      const matchesContributions = selectedContributions === 'all' || 
+        (selectedContributions === '0' && member.contributions === 0) ||
+        (selectedContributions === '11+' && member.contributions >= 11) ||
+        (() => {
+          const [min, max] = selectedContributions.split('-').map(Number);
+          return member.contributions >= min && member.contributions <= max;
+        })();
 
-  const getRoleIcon = (role: Member['role']) => {
-    switch (role) {
-      case 'admin':
-        return <StarIcon className="h-5 w-5" />
-      case 'member':
-        return <UserCircleIcon className="h-5 w-5" />
-      case 'volunteer':
-        return <UserGroupIcon className="h-5 w-5" />
-    }
-  }
+      return matchesSearch && matchesStatus && matchesFinancialStatus && 
+             matchesMaritalStatus && matchesOccupation && matchesGender && 
+             matchesContributions;
+    })
+    .sort((a, b) => {
+      if (sortOrder === 'asc') {
+        return a.name.localeCompare(b.name);
+      } else {
+        return b.name.localeCompare(a.name);
+      }
+    });
+
+  const resetFilters = () => {
+    setSearchTerm('');
+    setSelectedStatus('all');
+    setSelectedFinancialStatus('all');
+    setSelectedMaritalStatus('all');
+    setSelectedOccupation('all');
+    setSelectedGender('all');
+    setSelectedContributions('all');
+  };
+
+  const handleRowClick = (memberId: string) => {
+    router.push(`/associations/${params.id}/members/${memberId}`);
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-blue-50">
-      <Navigation />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">أعضاء العشيرة</h1>
-          {/* <p className="text-gray-600">إدارة وتتبع أعضاء الجمعية</p> */}
-        </div>
+    <div>
 
-        {/* Filters */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-indigo-100 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Search */}
-            <div className="relative">
-              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
+      <Navigation />
+    
+    <div className="flex h-screen">
+      {/* Filters Sidebar */}
+      <div className={`bg-background border-r transition-all duration-300 ${isFiltersOpen ? 'w-80' : 'w-0'}`}>
+        <div className="h-full flex flex-col">
+          <div className="p-4 border-b flex justify-between items-center">
+            <h2 className="text-lg font-semibold">التصفية</h2>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" onClick={resetFilters}>
+                إعادة تعيين
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsFiltersOpen(false)}
+                className="md:hidden"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          
+          <ScrollArea className="flex-1 p-4">
+            <div className="space-y-6">
+
+              <div>
+                <label className="text-sm font-medium mb-2 block text-right">الحالة</label>
+                <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="اختر الحالة" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">الكل</SelectItem>
+                    <SelectItem value="active">نشط</SelectItem>
+                    <SelectItem value="inactive">غير نشط</SelectItem>
+                    <SelectItem value="pending">قيد الانتظار</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-              <input
-                type="text"
+
+              <div>
+                <label className="text-sm font-medium mb-2 block text-right">الحالة المالية</label>
+                <Select value={selectedFinancialStatus} onValueChange={setSelectedFinancialStatus}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="اختر الحالة المالية" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">الكل</SelectItem>
+                    <SelectItem value="poor">معوز</SelectItem>
+                    <SelectItem value="rich">مكتفي</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-2 block text-right">الحالة الاجتماعية</label>
+                <Select value={selectedMaritalStatus} onValueChange={setSelectedMaritalStatus}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="اختر الحالة الاجتماعية" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">الكل</SelectItem>
+                    <SelectItem value="single">أعزب</SelectItem>
+                    <SelectItem value="married">متزوج</SelectItem>
+                    <SelectItem value="divorced">مطلق</SelectItem>
+                    <SelectItem value="widowed">أرمل</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-2 block text-right">المهنة</label>
+                <Select value={selectedOccupation} onValueChange={setSelectedOccupation}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="اختر المهنة" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">الكل</SelectItem>
+                    <SelectItem value="employed">موظف</SelectItem>
+                    <SelectItem value="student">طالب</SelectItem>
+                    <SelectItem value="unemployed">عاطل عن العمل</SelectItem>
+                    <SelectItem value="retired">متقاعد</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-2 block text-right">الجنس</label>
+                <Select value={selectedGender} onValueChange={setSelectedGender}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="اختر الجنس" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">الكل</SelectItem>
+                    <SelectItem value="male">ذكر</SelectItem>
+                    <SelectItem value="female">أنثى</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+            </div>
+          </ScrollArea>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        <div className="p-6 border-b">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-4">
+              {!isFiltersOpen && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsFiltersOpen(true)}
+                  className="md:hidden"
+                >
+                  <ChevronRight className="h-4 w-4" />
+                </Button>
+              )}
+              <h1 className="text-2xl font-bold">الأعضاء ({filteredMembers.length})</h1>
+            </div>
+            <div className="flex gap-4">
+              <Input
                 placeholder="بحث..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="block w-full pr-10 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="w-64 text-right"
               />
-            </div>
-
-            {/* Status Filter */}
-            <div className="relative">
-              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                <FunnelIcon className="h-5 w-5 text-gray-400" />
-              </div>
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="block w-full pr-10 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              >
-                <option value="all">جميع الحالات</option>
-                <option value="active">نشط</option>
-                <option value="inactive">غير نشط</option>
-                <option value="pending">قيد الانتظار</option>
-              </select>
-            </div>
-
-            {/* Role Filter */}
-            <div className="relative">
-              <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                <UserGroupIcon className="h-5 w-5 text-gray-400" />
-              </div>
-              <select
-                value={roleFilter}
-                onChange={(e) => setRoleFilter(e.target.value)}
-                className="block w-full pr-10 border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              >
-                <option value="all">جميع الأدوار</option>
-                <option value="admin">مسؤول</option>
-                <option value="member">عضو</option>
-                <option value="volunteer">متطوع</option>
-              </select>
             </div>
           </div>
         </div>
 
-        {/* Members Table */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-indigo-100 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">العضو</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الحالة</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">الدور</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">تاريخ الانضمام</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">آخر نشاط</th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">المساهمات</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {filteredMembers.map((member) => (
-                  <tr key={member.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10">
-                          <UserCircleIcon className="h-10 w-10 text-gray-400" />
-                        </div>
-                        <div className="mr-4">
-                          <div className="text-sm font-medium text-gray-900">{member.name}</div>
-                          <div className="text-sm text-gray-500">{member.email}</div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className={`flex items-center ${getStatusColor(member.status)} px-2 py-1 rounded-full`}>
-                        {getStatusIcon(member.status)}
-                        <span className="mr-2 text-sm font-medium">
-                          {member.status === 'active' ? 'نشط' : 
-                           member.status === 'inactive' ? 'غير نشط' : 'قيد الانتظار'}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center text-gray-500">
-                        {getRoleIcon(member.role)}
-                        <span className="mr-2 text-sm">
-                          {member.role === 'admin' ? 'مسؤول' : 
-                           member.role === 'member' ? 'عضو' : 'متطوع'}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <div className="flex items-center">
-                        <CalendarIcon className="h-4 w-4 ml-2" />
-                        {new Date(member.joinDate).toLocaleDateString('ar-SA')}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <div className="flex items-center">
-                        <CalendarIcon className="h-4 w-4 ml-2" />
-                        {new Date(member.lastActivity).toLocaleDateString('ar-SA')}
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {member.contributions}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+        <div className="flex-1 p-6">
+          <Card>
+            <ScrollArea className="h-[calc(100vh-12rem)]">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-right">الجنس</TableHead>
+                    <TableHead className="text-right">المهنة</TableHead>
+                    <TableHead className="text-right">الحالة الاجتماعية</TableHead>
+                    <TableHead className="text-right">المساهمات</TableHead>
+                    <TableHead className="text-right">آخر نشاط</TableHead>
+                    <TableHead className="text-right">الحالة المالية</TableHead>
+                    <TableHead className="text-right">الحالة</TableHead>
+                    <TableHead className="text-right">تاريخ الانضمام</TableHead>
+                    <TableHead className="text-right">رقم الهاتف</TableHead>
+                    <TableHead className="text-right">البريد الإلكتروني</TableHead>
+                    <TableHead className="text-right">الاسم</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredMembers.map((member) => (
+                    <TableRow 
+                      key={member.id}
+                      className="cursor-pointer hover:bg-accent"
+                      onClick={() => handleRowClick(member.id)}
+                    >
+                      <TableCell className="text-right">
+                        {member.gender === 'male' ? 'ذكر' : 'أنثى'}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {member.occupation === 'employed'
+                          ? 'موظف'
+                          : member.occupation === 'student'
+                          ? 'طالب'
+                          : member.occupation === 'unemployed'
+                          ? 'عاطل عن العمل'
+                          : 'متقاعد'}
+                      </TableCell>
+                      <TableCell className="text-right">
+                        {member.maritalStatus === 'single'
+                          ? 'أعزب'
+                          : member.maritalStatus === 'married'
+                          ? 'متزوج'
+                          : member.maritalStatus === 'divorced'
+                          ? 'مطلق'
+                          : 'أرمل'}
+                      </TableCell>
+                      <TableCell className="text-right">{member.contributions}</TableCell>
+                      <TableCell className="text-right">{member.lastActivity}</TableCell>
+                      <TableCell className="text-right">
+                        <Badge
+                          variant={
+                            member.financialStatus === 'rich'
+                              ? 'success'
+                              : 'destructive'
+                          }
+                        >
+                          {member.financialStatus === 'poor'
+                            ? 'معوز'
+                            : 'مكتفي'}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Badge
+                          variant={
+                            member.status === 'active'
+                              ? 'success'
+                              : member.status === 'inactive'
+                              ? 'destructive'
+                              : 'secondary'
+                          }
+                        >
+                          {member.status === 'active'
+                            ? 'نشط'
+                            : member.status === 'inactive'
+                            ? 'غير نشط'
+                            : 'قيد الانتظار'}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right">{member.joinDate}</TableCell>
+                      <TableCell className="text-right">{member.phone}</TableCell>
+                      <TableCell className="text-right">{member.email}</TableCell>
+                      <TableCell className="text-right">{member.name}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </ScrollArea>
+          </Card>
         </div>
       </div>
     </div>
-  )
+    </div>
+  );
 } 

@@ -11,86 +11,21 @@ import JoinAssociationModal from '@/components/JoinAssociationModal';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '@/store/store';
 import { joinAssociation } from '@/store/slices/membershipsSlice';
-
-// Mock data for associations
-const associations = [
-  {
-    id: 1,
-    name: 'جمعية التنمية الاجتماعية',
-    description: 'جمعية تعنى بالتنمية الاجتماعية والثقافية في المنطقة',
-    banner: '/banner1.jpg',
-    activities: [
-      {
-        id: 1,
-        title: 'ورشة عمل حول التنمية المستدامة',
-        description: 'ورشة عمل حول مفاهيم التنمية المستدامة وأهدافها',
-        date: '2024-03-15'
-      },
-      {
-        id: 2,
-        title: 'حملة توعية مجتمعية',
-        description: 'حملة توعية حول أهمية العمل التطوعي',
-        date: '2024-03-10'
-      }
-    ]
-  },
-  {
-    id: 2,
-    name: 'جمعية حماية البيئة',
-    description: 'جمعية تعنى بحماية البيئة وتوعية المجتمع',
-    banner: '/banner2.jpg',
-    activities: [
-      {
-        id: 1,
-        title: 'حملة تنظيف الشاطئ',
-        description: 'حملة تنظيف شاطئ المدينة',
-        date: '2024-03-20'
-      }
-    ]
-  },
-  {
-    id: 3,
-    name: 'جمعية رعاية المسنين',
-    description: 'جمعية تعنى برعاية المسنين وتقديم الخدمات لهم',
-    banner: '/banner3.jpg',
-    activities: [
-      {
-        id: 1,
-        title: 'زيارة دور المسنين',
-        description: 'زيارة دور المسنين وتقديم الهدايا',
-        date: '2024-03-25'
-      }
-    ]
-  }
-];
-
-// Mock user memberships - this would come from your backend
-interface UserMemberships {
-  [key: number]: boolean;
-}
-
-const userMemberships: UserMemberships = {
-  1: true,  // User is a member of association with ID 1
-  2: false, // User is not a member of association with ID 2
-  3: false  // User is not a member of association with ID 3
-};
+import { getAssociationById } from '@/lib/dataService';
 
 export default function AssociationPage() {
   const params = useParams();
-  const associationId = parseInt(params.id as string);
+  const associationId = params.id as string;
   const dispatch = useDispatch();
   
   const { user } = useSelector((state: RootState) => state.auth);
-  const { memberships } = useSelector((state: RootState) => state.memberships);
-  const { data: associations } = useSelector((state: RootState) => state.associations);
-
-  
+  const memberships = useSelector((state: RootState) => state.memberships);
   
   const isAdmin = user?.is_staff || user?.is_superuser;
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
   const isMember = memberships[associationId] || false;
 
-  const association = associations.find(a => a.id === associationId);
+  const association = getAssociationById(associationId);
 
   const handleJoinSubmit = (data: any) => {
     // Here you would typically send the join request to your backend
@@ -144,34 +79,7 @@ export default function AssociationPage() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h2 className="text-2xl font-bold text-gray-900 mb-4 font-[800]">
-                      نبذة عن الجمعية
-                    </h2>
-                    <p className="text-gray-600 font-[400]">
-                      {association.description}
-                    </p>
-                  </div>
-                  {!isAdmin && (
-                    <div>
-                      {isMember ? (
-                        <span className="inline-flex items-center px-4 py-2 rounded-md text-sm font-medium bg-green-100 text-green-800 font-[600]">
-                          عضو في الجمعية
-                        </span>
-                      ) : (
-                        <button
-                          onClick={() => setIsJoinModalOpen(true)}
-                          className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition duration-150 ease-in-out font-[600]"
-                        >
-                          الانضمام إلى الجمعية
-                        </button>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
+            
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className={isAdmin ? "md:col-span-2" : "md:col-span-3"}>
@@ -205,7 +113,7 @@ export default function AssociationPage() {
                     <div className="bg-white rounded-lg shadow-md p-6 sticky top-8">
                       <h2 className="text-xl font-bold text-gray-900 mb-4 font-[800]">
                         إجراءات سريعة
-                      </h2>
+                      </h2>block
                       <div className="space-y-4">
                         <Link
                           href={`/associations/${association.id}/activities/new`}

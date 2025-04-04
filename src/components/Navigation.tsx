@@ -8,7 +8,7 @@ export default function Navigation() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="text-xl font-bold text-primary-600 font-[800]">
-              منصة الجمعيات
+              تدارت نوغرم
             </Link>
           </div>
           <div className="flex items-center space-x-4">
