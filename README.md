@@ -44,6 +44,20 @@ A modern web application for managing associations and population data, built wi
    ```
 4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
+## User Accounts
+
+The application comes with two pre-configured user accounts:
+
+- **Admin User**
+  - Username: `admin`
+  - Password: `admin`
+  - Role: Administrator with full access to all features
+
+- **Regular User**
+  - Username: `user`
+  - Password: `user`
+  - Role: Standard user with limited permissions
+
 ## Project Structure
 
 ```
