@@ -1,4 +1,6 @@
-import React from 'react'
+"use client"
+
+import React, { useState } from 'react'
 import { fetchAssociations } from '@/lib/mockApi'
 import Navigation from '@/components/Navigation'
 import Sidebar from '@/components/Sidebar'
@@ -9,7 +11,14 @@ import {
   ChartBarIcon, 
   TrophyIcon,
   StarIcon,
-  ClockIcon
+  ClockIcon,
+  BuildingOfficeIcon,
+  EnvelopeIcon,
+  PhoneIcon,
+  MapPinIcon,
+  DocumentTextIcon,
+  XMarkIcon,
+  CheckCircleIcon
 } from '@heroicons/react/24/outline'
 
 export default async function HomePage() {
@@ -45,8 +54,9 @@ export default async function HomePage() {
 
   return (
     <ProtectedRoute>
+      <Navigation />
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-blue-50">
-        <Navigation />
+        {/* <Navigation /> */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             {/* Sidebar */}
@@ -191,4 +201,3 @@ export default async function HomePage() {
     </ProtectedRoute>
   )
 }
-

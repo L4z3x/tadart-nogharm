@@ -8,68 +8,19 @@ import Sidebar from '@/components/Sidebar';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import { getAssociations } from '@/lib/dataService';
 
 // Mock data for associations
-const associations = [
-  {
-    id: 1,
-    name: 'جمعية التنمية الاجتماعية',
-    description: 'جمعية تعنى بالتنمية الاجتماعية والثقافية في المنطقة',
-    banner: '/banner1.jpg',
-    activities: [
-      {
-        id: 1,
-        title: 'ورشة عمل حول التنمية المستدامة',
-        description: 'ورشة عمل حول مفاهيم التنمية المستدامة وأهدافها',
-        date: '2024-03-15'
-      },
-      {
-        id: 2,
-        title: 'حملة توعية مجتمعية',
-        description: 'حملة توعية حول أهمية العمل التطوعي',
-        date: '2024-03-10'
-      }
-    ]
-  },
-  {
-    id: 2,
-    name: 'جمعية حماية البيئة',
-    description: 'جمعية تعنى بحماية البيئة وتوعية المجتمع',
-    banner: '/banner2.jpg',
-    activities: [
-      {
-        id: 1,
-        title: 'حملة تنظيف الشاطئ',
-        description: 'حملة تنظيف شاطئ المدينة',
-        date: '2024-03-20'
-      }
-    ]
-  },
-  {
-    id: 3,
-    name: 'جمعية رعاية المسنين',
-    description: 'جمعية تعنى برعاية المسنين وتقديم الخدمات لهم',
-    banner: '/banner3.jpg',
-    activities: [
-      {
-        id: 1,
-        title: 'زيارة دور المسنين',
-        description: 'زيارة دور المسنين وتقديم الهدايا',
-        date: '2024-03-25'
-      }
-    ]
-  }
-];
-
+const associations = getAssociations();
 // Mock user memberships - this would come from your backend
 interface UserMemberships {
-  [key: number]: boolean;
+  [key: string]: boolean;
 }
 
 const userMemberships: UserMemberships = {
-  1: true,  // User is a member of association with ID 1
-  2: false, // User is not a member of association with ID 2
-  3: false  // User is not a member of association with ID 3
+  "1": true,  // User is a member of association with ID 1
+  "2": false, // User is not a member of association with ID 2
+  "3": false  // User is not a member of association with ID 3
 };
 
 export default function MyAssociationsPage() {
@@ -91,7 +42,7 @@ export default function MyAssociationsPage() {
             <div className="md:col-span-3">
               <div className="bg-white rounded-lg shadow-md p-6 mb-8">
                 <h1 className="text-2xl font-bold text-gray-900 mb-6 font-[800]">
-                  الجمعيات التي أنتمي إليها
+                  الهيئات التي أنتمي إليها
                 </h1>
 
                 {userAssociations.length === 0 ? (
@@ -103,7 +54,7 @@ export default function MyAssociationsPage() {
                       href="/associations"
                       className="mt-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition duration-150 ease-in-out font-[600]"
                     >
-                      استكشف الجمعيات
+                      استكشف الهيئات
                     </Link>
                   </div>
                 ) : (

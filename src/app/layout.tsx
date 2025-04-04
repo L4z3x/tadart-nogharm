@@ -3,12 +3,15 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { Providers } from '@/store/Providers';
+import { cn } from "@/lib/utils";
+import { cairo } from './fonts';
+import { Toaster } from "@/components/ui/toaster"
 
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Association & Population Data Platform',
-  description: 'A platform for managing associations and population data',
+  title: 'تدارت نوغرم',
+  description: 'منصة إدارة الجمعيات',
 };
 
 export default function RootLayout({
@@ -18,10 +21,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ar" dir="rtl">
-      <body className={inter.className}>
+      <body className={cn(
+        "min-h-screen bg-background font-sans antialiased",
+        cairo.variable
+      )}>
         <Providers>
           {children}
         </Providers>
+        <Toaster />
       </body>
     </html>
   );
