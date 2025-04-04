@@ -81,6 +81,36 @@ src/
 - Start production server: `npm start`
 - Lint code: `npm run lint`
 
+## Deployment
+
+### Deploying to Vercel
+
+This application is optimized for deployment on Vercel. Follow these steps to deploy:
+
+1. Create a [Vercel account](https://vercel.com/signup) if you don't have one
+2. Install the Vercel CLI:
+   ```bash
+   npm install -g vercel
+   ```
+3. Login to Vercel:
+   ```bash
+   vercel login
+   ```
+4. Deploy the application:
+   ```bash
+   vercel
+   ```
+5. Follow the prompts to complete the deployment
+
+For automatic deployments, connect your GitHub repository to Vercel:
+1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
+2. Click "New Project"
+3. Import your GitHub repository
+4. Configure your project settings
+5. Click "Deploy"
+
+Vercel will automatically deploy your application when you push changes to your repository.
+
 ## Contributing
 
 1. Fork the repository

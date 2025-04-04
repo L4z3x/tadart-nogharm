@@ -398,5 +398,52 @@
       "occupation": "employed",
       "gender": "male"
     }
+  ],
+  "accessRequests": [
+    {
+      "id": 1,
+      "userId": 1,
+      "userName": "أحمد محمد",
+      "associationId": 2,
+      "status": "pending",
+      "requestedAt": "2024-04-01T10:00:00Z",
+      "notes": "رغبة في الانضمام للمكتب للاستفادة من برامجه التعليمية"
+    },
+    {
+      "id": 2,
+      "userId": 2,
+      "userName": "سارة أحمد",
+      "associationId": 3,
+      "status": "approved",
+      "requestedAt": "2024-03-15T14:30:00Z",
+      "notes": "رغبة في المشاركة في الأنشطة الدينية"
+    },
+    {
+      "id": 3,
+      "userId": 3,
+      "userName": "محمد علي",
+      "associationId": 4,
+      "status": "pending",
+      "requestedAt": "2024-04-02T09:15:00Z",
+      "notes": "رغبة في المساهمة في المشاريع التنموية"
+    },
+    {
+      "id": 4,
+      "userId": 4,
+      "userName": "فاطمة حسن",
+      "associationId": 5,
+      "status": "rejected",
+      "requestedAt": "2024-03-20T16:45:00Z",
+      "notes": "طلب مرفوض لعدم اكتمال الشروط"
+    },
+    {
+      "id": 5,
+      "userId": 5,
+      "userName": "خالد عبدالله",
+      "associationId": 1,
+      "status": "pending",
+      "requestedAt": "2024-04-05T11:30:00Z",
+      "notes": "رغبة في الانضمام للعشيرة للمشاركة في أنشطتها الاجتماعية"
+    }
   ]
 }  

@@ -1,8 +1,8 @@
 import data from './data.json';
 import { Data, Member, Association } from './types';
 
-// Type assertion to ensure data matches our Data interface
-const typedData = data as Data;
+// Use a safer type assertion approach
+const typedData = data as unknown as Data;
 
 export function getData(): Data {
   return typedData;

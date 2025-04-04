@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "vercel:deploy": "vercel --prod",
+    "vercel:setup": "./scripts/setup-vercel.sh"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
